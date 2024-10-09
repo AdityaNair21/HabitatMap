@@ -1,9 +1,9 @@
+version: '3'
 
 services:
-
   back-end:
     build:
-      context: node
+      context: ./node
     container_name: back-end
     working_dir: /usr/src/app
     networks:
@@ -20,7 +20,7 @@ services:
 
   front-end:
     build:
-      context: react
+      context: ./react
     container_name: front-end
     working_dir: /usr/src/app
     networks:
@@ -38,10 +38,12 @@ services:
     container_name: db
     restart: always
     volumes:
-      - mongo:/data/db
+      - mongo-data:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGODB_LOG_VERBOSITY=0
+    command: mongod --logpath /dev/null # Disables logging to stdout
     ports:
       - "27017:27017"
     networks:
@@ -49,7 +51,7 @@ services:
 
   nginx:
     build:
-      context: nginx
+      context: ./nginx
     container_name: nginx
     restart: always
     tty: true
@@ -64,3 +66,6 @@ services:
 networks:
   node-network:
     driver: bridge
+
+volumes:
+  mongo-data:
