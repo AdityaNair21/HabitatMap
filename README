@@ -1,11 +1,12 @@
-To get started run following commands
-# Starting and Running Services/Containers
+## Getting Started
+
+### Starting and Running Services/Containers
 
 To start and run the services/containers listed in the Docker Compose file in detached mode, use the following command:
 
 1. `docker compose up -d`
 
-For a GUI, you can use Docker Desktop. After running the above command, there will be three containers running under HABITATMAP: front-end, back-end, and db.
+For a GUI, you can use Docker Desktop. After running the above command, there will be three containers running under **HABITATMAP**: front-end, back-end, and db.
 
 To terminate the containers, use the following command:
 
@@ -13,7 +14,7 @@ To terminate the containers, use the following command:
 
 Alternatively, you can use Docker Desktop.
 
-# Accessing the Database (MongoDB)
+### Accessing the Database (MongoDB)
 
 To access the MongoDB database from the terminal with admin privileges, use the following command:
 
