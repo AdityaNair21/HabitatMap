@@ -15,5 +15,6 @@ export default function AnimalPage() {
                 {animalName} page goes here
             </Typography>
         </Container>
+        //testing
     );
 }
