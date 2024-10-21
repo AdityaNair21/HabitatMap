@@ -1,0 +1,14 @@
+Rest Api - JSON
+
+Dashboard:
+    User Reports:
+        GET /reports - get all reports
+        
+        GET /report/{user_id} - get all reports by user_id
+
+        POST /report - create new report
+
+        PATCH /report/{report_id} - update parts of the report with given report_id
+
+        DELETE /report/{report_id} - delete the report posted by given report_id
+        
