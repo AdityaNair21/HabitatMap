@@ -18,8 +18,10 @@ Alternatively, you can use Docker Desktop.
 
 To access the MongoDB database from the terminal with admin privileges, use the following command:
 
-1. `docker exec -it db mongosh -u root -p password`
+3. `docker exec -it db mongosh -u root -p password`
 
 You will see `test>`. The following command will take you to the `habitatmap` database:
 
-2. `use habitatmap`
+4. `use habitatmap`
+
+Now you can access all collections; users, species, reports, and any other which might be add in future.

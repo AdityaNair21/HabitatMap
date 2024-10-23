@@ -3,12 +3,17 @@ Rest Api - JSON
 Dashboard:
     User Reports:
         GET /reports - get all reports
-        
-        GET /report/{user_id} - get all reports by user_id
 
-        POST /report - create new report
+        GET /reports/:id - get report with given id
+            ":id" -> colon with id means id is a variable (this is a dynamic path parameter)
 
-        PATCH /report/{report_id} - update parts of the report with given report_id
+        GET /reports/user/:id - get all reports made by specific user
 
-        DELETE /report/{report_id} - delete the report posted by given report_id
+        GET /reports/species/:id - get all reports made about a specific species   
+
+        POST /reports - create new report
+
+        PATCH /reports/:id - update parts of the report with given id
+
+        DELETE /reports/:id - delete the report posted with given id
         
