@@ -1,4 +1,6 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
 const app = express();
 const port = 3000;
 
@@ -6,6 +8,20 @@ const port = 3000;
 // Restful API
 
 //Report APIs:
+//example: server side rendering and redirecting the form data to the appropriate route
+app.get('/', (req, res) => {
+  return res.send(
+    `<form action="/reports/filters" method="get">
+    <label for="reportId">Enter Report ID:</label>
+    <input type="text" id="reportId" name="reportId"><br><br>
+    <label for="userId">Enter User ID:</label>
+    <input type="text" id="userId" name="userId"><br><br>
+    <label for="speciesId">Enter Species ID:</label>
+    <input type="text" id="speciesId" name="speciesId"><br><br>
+    <input type="submit" value="Submit">
+    </form>`);
+});
+
 app.get('/reports', (req, res) => {
   res.send('All reports will be returned in json format using res.json()');
 });

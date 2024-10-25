@@ -24,4 +24,4 @@ You will see `test>`. The following command will take you to the `habitatmap` da
 
 4. `use habitatmap`
 
-Now you can access all collections; users, species, reports, and any other which might be add in future.
+Now you can access all collections; users, species, reports, follows, and any other which might be add in future.

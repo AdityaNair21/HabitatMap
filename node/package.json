@@ -4,12 +4,14 @@
   "description": "Backend of habitatmap",
   "main": "index.js",
   "scripts": {
-    "start": "node index"
+    "start": "nodemon index"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.1",
-    "habitatmap": "file:"
+    "habitatmap": "file:",
+    "mongoose": "^8.7.2",
+    "nodemon": "^3.1.7"
   }
 }
