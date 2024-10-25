@@ -4,6 +4,13 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
+// Connect to MongoDB
+mongoose.connect('mongodb://root:password@localhost:27017/habitatmap')
+.then(() => console.log('Connected to MongoDB'))
+.catch((err) => console.error('Could not connect to MongoDB:\n' + 
+  'Check if db container is running and mongodb service is up. ' +
+  'If there is still an issue read this error msg:\n\n', err));
+
 // Define the route for the root path
 // Restful API
 
