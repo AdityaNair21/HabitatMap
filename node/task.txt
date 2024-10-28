@@ -1,0 +1,19 @@
+Rest Api - JSON
+
+Dashboard:
+    User Reports:
+        GET /reports - get all reports
+
+        GET /reports/:id - get report with given id
+            ":id" -> colon with id means id is a variable (this is a dynamic path parameter)
+
+        GET /reports/user/:id - get all reports made by specific user
+
+        GET /reports/species/:id - get all reports made about a specific species   
+
+        POST /reports - create new report
+
+        PATCH /reports/:id - update parts of the report with given id
+
+        DELETE /reports/:id - delete the report posted with given id
+        
