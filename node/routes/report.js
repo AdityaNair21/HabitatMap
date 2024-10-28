@@ -31,8 +31,9 @@ router.get('/filters', (req, res) => {
     );
 });
 
-router.get('/:id', (req, res) => {
-    res.send('A single report will be returned in json format using res.json()\n' + 'reportId: ' + req.params.id);
+router.get('/:id', async (req, res) => {
+    const reportDoc =  await Report.find({"_id":req.params.id}).lean();
+    return res.status(200).send(reportDoc);
 });
 
 router.get('/user/:id', (req, res) => {
@@ -46,7 +47,7 @@ router.get('/species/:id', (req, res) => {
 router.post('/', async (req, res) => {
     console.log(req.body);
     const createdReport = await Report.create(req.body);
-    return res.json(createdReport).status(201);
+    return res.status(201).json(createdReport);
 });
 
 router.patch('/:id', (req, res) => {
