@@ -35,6 +35,6 @@ const ReportSchema2 = new mongoose.Schema({
 {timestamps: true});
 
 // Create a model from the schema
-const Report = mongoose.model('Report', ReportSchema);
+const Report = mongoose.model('Report', ReportSchema2);
 
 module.exports = { Report };

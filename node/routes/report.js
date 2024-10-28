@@ -37,11 +37,15 @@ router.get('/:id', async (req, res) => {
 });
 
 router.get('/user/:id', (req, res) => {
-    res.send('All reports for a user will be returned in json format using res.json()\n' + 'userId: ' + req.params.id);
+    const reportDoc =  Report.find({"userId":req.params.id}).lean();
+    return res.status(200).send(reportDoc);
+    //res.send('All reports for a user will be returned in json format using res.json()\n' + 'userId: ' + req.params.id);
 });
 
 router.get('/species/:id', (req, res) => {
-    res.send('All reports for a user will be returned in json format using res.json()\n' + 'speciesId: ' + req.params.id);
+    const reportDoc =  Report.find({"speciesId":req.params.id}).lean();
+    return res.status(200).send(reportDoc);
+    //res.send('All reports for a user will be returned in json format using res.json()\n' + 'speciesId: ' + req.params.id);
 });
 
 router.post('/', async (req, res) => {
