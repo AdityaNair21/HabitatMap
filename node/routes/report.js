@@ -16,9 +16,15 @@ router.get('/home', (req, res) => {
     );
 });
 
-router.get('/', (req, res) => {
-    res.send('All reports will be returned in json format using res.json()');
+router.get('/', async (req, res) => {
+    const reportDoc =  await Report.find().lean();
+    return res.status(200).send(reportDoc);
+    //res.send('All reports will be returned in json format using res.json()');
 });
+
+
+
+
 
 // Alternative to individual gets using query params
 router.get('/filters', (req, res) => {
@@ -54,8 +60,9 @@ router.post('/', async (req, res) => {
     return res.status(201).json(createdReport);
 });
 
-router.patch('/:id', (req, res) => {
-    res.send('A report will be updated\n' + 'reportId: ' + req.params.id);
+router.patch('/:id', async (req, res) => {
+    const updatedR = await Report.updateOne({ _id: req.params.id }, { $set: req.body });
+    return res.status(200).json(updatedR);
 });
 
 router.delete('/:id', (req, res) => {
