@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { Report } = require('../models/report.js');
+const reportController = require('../controllers/reports.js');
+
+/*
 // Example: server side rendering and redirecting the form data to the appropriate route
 router.get('/home', (req, res) => {
     return res.send(
         `<form action="/reports/filters" method="get">
-        <label for="reportId">Enter Report ID:</label>
-        <input type="text" id="reportId" name="reportId"><br><br>
         <label for="userId">Enter User ID:</label>
         <input type="text" id="userId" name="userId"><br><br>
         <label for="speciesId">Enter Species ID:</label>
@@ -16,57 +16,55 @@ router.get('/home', (req, res) => {
     );
 });
 
-router.get('/', async (req, res) => {
-    const reportDoc =  await Report.find().lean();
-    return res.status(200).send(reportDoc);
-    //res.send('All reports will be returned in json format using res.json()');
-});
-
-
-
-
-
 // Alternative to individual gets using query params
 router.get('/filters', (req, res) => {
-    const reportId = req.query.reportId;
     const userId = req.query.userId;
     const speciesId = req.query.speciesId;
     res.send(
         'All reports will be returned in json format using res.json() after applying filters\n' +
-        "reportId: " + reportId + "\n" + "userId: " + userId + "\n" + "speciesId: " + speciesId
+         + "\n" + "userId: " + userId + "\n" + "speciesId: " + speciesId
     );
 });
+*/
 
-router.get('/:id', async (req, res) => {
-    const reportDoc =  await Report.find({"_id":req.params.id}).lean();
-    return res.status(200).send(reportDoc);
-});
+router.route('/search')
+    .get(reportController.getReportsBySearch);
 
-router.get('/user/:id', (req, res) => {
-    const reportDoc =  Report.find({"userId":req.params.id}).lean();
-    return res.status(200).send(reportDoc);
-    //res.send('All reports for a user will be returned in json format using res.json()\n' + 'userId: ' + req.params.id);
-});
+router.route('/')
+    .get(reportController.getReports)
+    .post(reportController.createReport);
 
-router.get('/species/:id', (req, res) => {
-    const reportDoc =  Report.find({"speciesId":req.params.id}).lean();
-    return res.status(200).send(reportDoc);
-    //res.send('All reports for a user will be returned in json format using res.json()\n' + 'speciesId: ' + req.params.id);
-});
+router.route('/:id')
+    .get(reportController.getReportById)
+    .patch(reportController.updateReport)
+    .delete(reportController.deleteReport);
 
-router.post('/', async (req, res) => {
-    console.log(req.body);
-    const createdReport = await Report.create(req.body);
-    return res.status(201).json(createdReport);
-});
+router.route('/user/:id')
+    .get(reportController.getReportsByUserId);
 
-router.patch('/:id', async (req, res) => {
-    const updatedR = await Report.updateOne({ _id: req.params.id }, { $set: req.body });
-    return res.status(200).json(updatedR);
-});
+router.route('/species/:id')
+    .get(reportController.getReportsBySpeciesId);
 
-router.delete('/:id', (req, res) => {
-    res.send('A report will be deleted\n' + 'reportId: ' + req.params.id);
-});
+
+
+/*
+//alternate way to configure routes using individual 
+router.get('/', reportController.getReports);
+
+router.get('/:id', reportController.getReportById);
+
+router.get('/user/:id', reportController.getReportsByUserId);
+
+router.get('/species/:id', reportController.getReportsBySpeciesId);
+
+router.post('/', reportController.createReport);
+
+router.patch('/:id', reportController.updateReport);
+
+//put is to update the entire document
+//router.put('/:id', reportController.updateReport);
+
+router.delete('/:id', reportController.deleteReport);
+*/
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-async function connectMongoDb(url) {
+function connectMongoDb(url) {
     return mongoose.connect(url, {authSource: 'admin'});
 }
 
