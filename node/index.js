@@ -15,14 +15,10 @@ connectMongoDb('mongodb://root:password@localhost:27017/habitatmap')
 // Middleware
 app.use(express.json());
 
-// Define the route for the root path
-// Restful API
 
+// Restful API
 //Report APIs using router:
 app.use('/reports', reportRouter);
-
-
-
 
 
 app.listen(port, () => {
