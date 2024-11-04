@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import MapPage from "./components/MapPage";
-import AnimalPage from "./components/AnimalPage";
+import AnimalPage from "./components/AnimalPage.jsx";
 import Dashboard from "./components/Dashboard"
 
 export default function App() {
