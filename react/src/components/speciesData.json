@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "type": "Mammal",
+        "name": "Coyote",
+        "image": "./images/coyote.jpg",
+        "longitude": -122.4194,
+        "latitude": 37.7749
+    }
+]
