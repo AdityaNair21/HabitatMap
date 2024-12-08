@@ -75,28 +75,14 @@ async function deleteReport(req, res) {
     }
 }
 
-async function getReportsBySearch(req, res) {
-    try{
-        const userId = req.query.userId;
-        const speciesId = req.query.speciesId;
-        const reports = await Report.find({"user.userId":userId, "species.speciesId":speciesId});
-        if(reports.length === 0) {
-            return res.status(404).json('msg: No reports found');
-        }
-        return res.status(200).json(reports);
-    } catch(error) {
-        return res.status(500).json('Error: ' + error);
-    }
-}
 
 async function getReportsBySearch(req, res) {
-    //const search = req.query.speciesName? req.query.speciesName.split(" "): [];
     const speciesName = req.query.speciesName;
     if(!speciesName)
         return res.status(400).json("msg: search query is required");
 
     try{
-        const reports = await Report.find({ "species.commonName": speciesName });//{ $regex: {$in: search }}
+        const reports = await Report.find({ $text: {$search: "\"" + speciesName + "\""}});
         if(!reports)
             return res.status(404).json("msg: No reports found");
         return res.status(200).json(reports);

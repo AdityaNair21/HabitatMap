@@ -25,7 +25,9 @@ const ReportSchema = new mongoose.Schema({
 }, 
 {timestamps: true});
 
+ReportSchema.index({"species.commonName": 'text', "species.scientificName": 'text'});
+
 // Create a model from the schema
-const Report = mongoose.model('Report', ReportSchema);
+const Report = mongoose.model('Reports', ReportSchema);
 
 module.exports = { Report };
