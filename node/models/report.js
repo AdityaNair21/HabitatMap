@@ -17,8 +17,8 @@ const ReportSchema = new mongoose.Schema({
         picUrl: {type: String, required: true}
     },
     loc: {
-        lat: {type: Number, required: true},
-        lon: {type: Number, required: true}
+        type: {type: String, default: 'Point'},
+        coordinates: {type: [Number], required: true},
     },
     description: {type: String},
     picUrl: [{type: String}],
@@ -26,6 +26,7 @@ const ReportSchema = new mongoose.Schema({
 {timestamps: true});
 
 ReportSchema.index({"species.commonName": 'text', "species.scientificName": 'text'});
+ReportSchema.index({loc: '2dsphere'});
 
 // Create a model from the schema
 const Report = mongoose.model('Reports', ReportSchema);

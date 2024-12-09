@@ -8,6 +8,10 @@ function checkForEmptyReports(reports, next) {
     }
 }
 
+function convertMilesToRadians(miles) {
+    return miles / 3958.8;
+}
+
 async function getReports(req, res, next) {
     try {
         const reports = await Report.find();
@@ -54,7 +58,6 @@ async function getReportsBySpeciesId(req, res, next) {
 
 async function createReport(req, res, next) {
     try {
-        console.log(req.body[0].user.userId);
         const report = await Report.create(req.body);
         return res.status(201).json(report);
     } catch (error) {
@@ -81,15 +84,24 @@ async function deleteReport(req, res, next) {
 }
 
 async function getReportsBySearch(req, res, next) {
-    const speciesName = req.query.speciesName;
-    if (!speciesName) {
-        const error = new Error('Search query is required');
+    const { speciesName, speciesRadius, userLat, userLon } = req.query;
+
+    if (!speciesName || !speciesRadius || !userLat || !userLon) {
+        const error = new Error('Please provide a species name, radius, and user\'s location');
         error.status = 400;
         return next(error);
     }
 
     try {
-        const reports = await Report.find({ $text: { $search: `"${speciesName}"` } });
+        const reports = await Report.find({ $text: { $search: `"${speciesName}"` }, 
+                                            loc: {
+                                                $geoWithin: {
+                                                    $centerSphere: 
+                                                        [[userLon, userLat], 
+                                                        convertMilesToRadians(Number(speciesRadius))]
+                                                }
+                                            } });
+
         checkForEmptyReports(reports, next);
         return res.status(200).json(reports);
     } catch (error) {
