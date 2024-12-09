@@ -1,94 +1,100 @@
-const {Report} = require('../models/report.js');
+const { Report } = require('../models/report.js');
 
-async function getReports(req, res) {
-    try{
-        const reports = await Report.find();
-        if(reports.length === 0) {
-            return res.status(404).json('msg: No reports found');
-        }
-        return res.status(200).json(reports);
-    } catch(error) {
-        return res.status(500).json('Error: ' + error);
+function checkForEmptyReports(reports, next) {
+    if (reports.length === 0) {
+        const error = new Error('No reports found');
+        error.status = 404;
+        return next(error);
     }
 }
 
-async function getReportById(req, res) {
-    try{
+async function getReports(req, res, next) {
+    try {
+        const reports = await Report.find();
+        checkForEmptyReports(reports, next);
+        return res.status(200).json(reports);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getReportById(req, res, next) {
+    try {
         const report = await Report.findById(req.params.id);
-        if(report === null) {
-            return res.status(404).json('msg: No report found');
+        if (report === null) {
+            const error = new Error('No report found');
+            error.status = 404;
+            return next(error);
         }
         return res.status(200).json(report);
-    } catch(error) {
-        return res.status(500).json('Error: ' + error);
+    } catch (error) {
+        next(error);
     }
 }
 
-async function getReportsByUserId(req, res) {
-    try{
-        const reports = await Report.find({"user.userId":req.params.id});
-        if(reports.length === 0) {
-            return res.status(404).json('msg: No reports found');
-        }
+async function getReportsByUserId(req, res, next) {
+    try {
+        const reports = await Report.find({ "user.userId": req.params.id });
+        checkForEmptyReports(reports, next);
         return res.status(200).json(reports);
-    } catch(error) {
-        return res.status(500).json('Error: ' + error);
+    } catch (error) {
+        next(error);
     }
 }
 
-async function getReportsBySpeciesId(req, res) {
-    try{
-        const reports = await Report.find({"species.speciesId":req.params.id});
-        if(reports.length === 0) {
-            return res.status(404).json('msg: No reports found');
-        }
+async function getReportsBySpeciesId(req, res, next) {
+    try {
+        const reports = await Report.find({ "species.speciesId": req.params.id });
+        checkForEmptyReports(reports, next);
         return res.status(200).json(reports);
-    } catch(error) {
-        return res.status(500).json('Error: ' + error);
+    } catch (error) {
+        next(error);
     }
 }
 
-async function createReport(req, res) {
-    try{
+async function createReport(req, res, next) {
+    try {
+        console.log(req.body[0].user.userId);
         const report = await Report.create(req.body);
         return res.status(201).json(report);
-    } catch(error) {
-        return res.status(500).json('Error: ' + error);
+    } catch (error) {
+        next(error);
     }
 }
 
-async function updateReport(req, res) {
-    try{
-        const report = await Report.findByIdAndUpdate(req.params.id, req.body, {new: true});
+async function updateReport(req, res, next) {
+    try {
+        const report = await Report.findByIdAndUpdate(req.params.id, req.body, { new: true });
         return res.status(200).json(report);
-    } catch(error) {
-        return res.status(500).json('Error: ' + error);
+    } catch (error) {
+        next(error);
     }
 }
 
-async function deleteReport(req, res) {
-    try{
+async function deleteReport(req, res, next) {
+    try {
         const report = await Report.findByIdAndDelete(req.params.id);
         return res.status(200).json(report);
-    } catch(error) {
-        return res.status(500).json('Error: ' + error);
+    } catch (error) {
+        next(error);
     }
 }
 
-
-async function getReportsBySearch(req, res) {
+async function getReportsBySearch(req, res, next) {
     const speciesName = req.query.speciesName;
-    if(!speciesName)
-        return res.status(400).json("msg: search query is required");
+    if (!speciesName) {
+        const error = new Error('Search query is required');
+        error.status = 400;
+        return next(error);
+    }
 
-    try{
-        const reports = await Report.find({ $text: {$search: "\"" + speciesName + "\""}});
-        if(!reports)
-            return res.status(404).json("msg: No reports found");
+    try {
+        const reports = await Report.find({ $text: { $search: `"${speciesName}"` } });
+        checkForEmptyReports(reports, next);
         return res.status(200).json(reports);
-    } catch(error) { 
-        return res.status(500).json("Error: " + error)
-    } 
+    } catch (error) {
+        next(error);
+    }
 }
 
 module.exports = {

@@ -20,6 +20,15 @@ app.use(express.json());
 //Report APIs using router:
 app.use('/reports', reportRouter);
 
+// Global error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  const errRes = {
+    status: err.status || 500,
+    message: err.message || 'Internal Server Error'
+  };
+  return res.status(errRes.status).send(errRes);
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
