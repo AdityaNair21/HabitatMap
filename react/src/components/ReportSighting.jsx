@@ -106,10 +106,16 @@ const ReportSighting = () => {
 
             const reportData = {
                 user: currentUser,
-                speciesId: formData.species,
+                species: {
+                    speciesId: formData.species || "12345",
+                    commonName: "Tiger",
+                    scientificName: "Panthera tigris",
+                    description: "A large wild cat native to Asia.",
+                    picUrl: "https://example.com/species-pic.jpg"
+                },
                 loc: {
-                    lat: 3434,
-                    lon: 3434,
+                    type: "Point",
+                    coordinates: [3434, 3434] // Correct order: [longitude, latitude]
                 },
                 description: formData.description,
                 picUrl: formData.picUrl
