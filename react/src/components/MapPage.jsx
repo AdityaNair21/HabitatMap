@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Paper, IconButton, TextField, Box, Button, CircularProgress, Alert } from '@mui/material';
+import { Typography, IconButton, TextField, Box, Button, CircularProgress, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Map, { Marker, Popup } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -18,11 +18,32 @@ export default function MapPage() {
     });
 
     const [reports, setReports] = useState([]);
+    const [uniqueSpecies, setUniqueSpecies] = useState([]);
     const [popupInfo, setPopupInfo] = useState(null);
     const [searchInput, setSearchInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [searchRadius, setSearchRadius] = useState(5); // Default 5 mile radius
+
+    const getMarkerColor = (speciesName) => {
+        const colors = [
+            '#FF5733', // Red-Orange
+            '#33FF57', // Green
+            '#3357FF', // Blue
+            '#FF33F5', // Pink
+            '#33FFF5', // Cyan
+            '#FFB533', // Orange
+            '#B533FF', // Purple
+            '#FF3333', // Red
+            '#33FFB5', // Mint
+            '#5733FF', // Indigo
+        ];
+        
+        const hash = speciesName.split('')
+            .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        
+        return colors[hash % colors.length];
+    };
 
     // Fetch all reports on component mount
     useEffect(() => {
@@ -47,6 +68,12 @@ export default function MapPage() {
         try {
             const response = await axios.get(`${API_BASE_URL}/reports`);
             setReports(response.data);
+            
+            // Extract unique species from reports
+            const species = [...new Set(response.data.map(report => 
+                report.species.commonName
+            ))];
+            setUniqueSpecies(species);
         } catch (err) {
             setError('Failed to fetch reports: ' + err.message);
             console.error('Error fetching reports:', err);
@@ -68,23 +95,18 @@ export default function MapPage() {
                 }
             });
             setReports(response.data);
+            
+            // Update unique species for filtered results
+            const species = [...new Set(response.data.map(report => 
+                report.species.commonName
+            ))];
+            setUniqueSpecies(species);
         } catch (err) {
             setError('Failed to search reports: ' + err.message);
             console.error('Error searching reports:', err);
         } finally {
             setLoading(false);
         }
-    };
-
-    const getMarkerColor = (species) => {
-        // You might want to adjust this based on your species data structure
-        const colorMap = {
-            'Coyote': 'red',
-            'Black Rat': 'black',
-            'American Bullfrog': 'green',
-            'African Honey Bee': 'yellow'
-        };
-        return colorMap[species.commonName] || 'gray';
     };
 
     return (
@@ -197,10 +219,10 @@ export default function MapPage() {
             >
                 {reports.map((report) => (
                     <Marker
-                        key={report._id}
+                        key={report.species.speciesId}
                         longitude={report.loc.coordinates[0]}
                         latitude={report.loc.coordinates[1]}
-                        color={getMarkerColor(report.species)}
+                        color={getMarkerColor(report.species.commonName)}
                         onClick={() => setPopupInfo(report)}
                     />
                 ))}
@@ -237,7 +259,7 @@ export default function MapPage() {
                                 {popupInfo.species.commonName}
                             </Typography>
                             <img
-                                src={popupInfo.species.picUrl}
+                                src={popupInfo.picUrl[0]} 
                                 alt={popupInfo.species.commonName}
                                 style={{ width: '100%', borderRadius: '8px', marginBottom: '8px' }}
                             />
@@ -246,9 +268,6 @@ export default function MapPage() {
                             </Typography>
                             <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                                 Reported by: {popupInfo.user.username}
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)', display: 'block' }}>
-                                Time: {new Date(popupInfo.createdAt).toLocaleString()}
                             </Typography>
                         </Box>
                     </Popup>
@@ -267,12 +286,32 @@ export default function MapPage() {
                 borderRadius: '8px',
                 maxWidth: '220px'
             }}>
-                <Typography variant="h6">Legend</Typography>
-                {/* You might want to make this dynamic based on your species data */}
-                <Typography variant="body2">🔴 Coyote</Typography>
-                <Typography variant="body2">⚫ Black Rat</Typography>
-                <Typography variant="body2">🟢 American Bullfrog</Typography>
-                <Typography variant="body2">🟡 African Honey Bee</Typography>
+                <Typography variant="h6" gutterBottom>Legend</Typography>
+                <Box sx={{ maxHeight: '300px', overflow: 'auto' }}>
+                    {uniqueSpecies.map((speciesName) => (
+                        <Box 
+                            key={speciesName} 
+                            sx={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: 1,
+                                mb: 1
+                            }}
+                        >
+                            <Box 
+                                sx={{ 
+                                    width: 12, 
+                                    height: 12, 
+                                    borderRadius: '50%', 
+                                    backgroundColor: getMarkerColor(speciesName)
+                                }} 
+                            />
+                            <Typography variant="body2">
+                                {speciesName}
+                            </Typography>
+                        </Box>
+                    ))}
+                </Box>
             </Box>
 
             {/* Footer */}
