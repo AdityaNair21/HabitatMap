@@ -1,5 +1,3 @@
-
-// Signup.jsx
 import React, { useState } from 'react';
 import {
     Box,
@@ -11,16 +9,18 @@ import {
     createTheme,
     CircularProgress,
     Alert,
+    Avatar,
+    IconButton,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { PhotoCamera } from '@mui/icons-material';
 
-// Use the same theme as Login component
+const OPENCAGE_API_KEY = "b50efeef55dc49b78813357c994656c1";
+
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
-        primary: {
-            main: '#1E88E5',
-        },
+        primary: { main: '#1E88E5' },
         background: {
             default: '#1a1a1a',
             paper: '#1d2634',
@@ -35,42 +35,95 @@ const darkTheme = createTheme({
 export default function Signup() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
+        username: '',
         email: '',
         password: '',
         confirmPassword: '',
+        address: '',
+        picUrl: '',
+        loc: { lat: null, lon: null }
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [serverError, setServerError] = useState('');
+    const [previewImage, setPreviewImage] = useState(null);
 
     const validateForm = () => {
         const newErrors = {};
 
-        // Email validation
+        if (!formData.username) {
+            newErrors.username = 'Username is required';
+        } else if (formData.username.length < 3) {
+            newErrors.username = 'Username must be at least 3 characters';
+        }
+
         if (!formData.email) {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Please enter a valid email';
         }
 
-        // Password validation
         if (!formData.password) {
             newErrors.password = 'Password is required';
-        } else if (formData.password.length < 8) {
-            newErrors.password = 'Password must be at least 8 characters';
+        } else if (formData.password.length < 2) {
+            newErrors.password = 'Password must be at least 2 characters';
         } else if (!/(?=.*[!@#$%^&*])/.test(formData.password)) {
             newErrors.password = 'Password must contain at least one special character';
         } else if (!/(?=.*\d)/.test(formData.password)) {
             newErrors.password = 'Password must contain at least one number';
         }
 
-        // Confirm password validation
         if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Passwords do not match';
         }
 
+        if (!formData.address) {
+            newErrors.address = 'Address is required';
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    const handleImageUpload = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            // Create a preview for the UI
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+
+            // In a real app, you'd upload to a cloud storage service
+            // For now, we'll use a dummy URL
+            setFormData(prev => ({
+                ...prev,
+                picUrl: URL.createObjectURL(file)
+            }));
+        }
+    };
+
+    const geocodeAddress = async (address) => {
+        try {
+            // const response = await fetch(
+            //     `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${OPENCAGE_API_KEY}`
+            // );
+            const response = await fetch(
+                `https://api.opencagedata.com/geocode/v1/json?q=4771+La+Cresta+Way+San+Jose&key=${OPENCAGE_API_KEY}`
+            );
+            const data = await response.json();
+
+            if (data.results && data.results.length > 0) {
+                const { lat, lng } = data.results[0].bounds.northeast;
+                console.log(lat, lng)
+                return { lat, lon: lng };
+            }
+            throw new Error('Address not found');
+        } catch (error) {
+            console.error('Geocoding error:', error);
+            throw error;
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -81,23 +134,30 @@ export default function Signup() {
 
         setIsLoading(true);
         try {
+            // First, geocode the address
+            const coordinates = await geocodeAddress(formData.address);
+            console.log("Coordinates: " + JSON.stringify(coordinates, null, 2))
+
             const response = await fetch('http://localhost:3000/createUser', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: formData.email.split('@')[0], // Generate a username from the email, or use a dedicated input if needed
+                    username: formData.username,
                     email: formData.email,
                     password: formData.password,
+                    picUrl: formData.picUrl,
+                    pinnedSpecies: [],
+                    loc: coordinates
                 }),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to create account');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to create account');
             }
 
-            // Handle successful signup
             navigate('/login');
         } catch (error) {
             setServerError(error.message);
@@ -138,6 +198,47 @@ export default function Signup() {
                     )}
 
                     <form onSubmit={handleSubmit}>
+                        {/* Profile Picture Upload */}
+                        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+                            <Box sx={{ position: 'relative' }}>
+                                <Avatar
+                                    src={previewImage}
+                                    sx={{ width: 100, height: 100 }}
+                                />
+                                <IconButton
+                                    color="primary"
+                                    aria-label="upload picture"
+                                    component="label"
+                                    sx={{
+                                        position: 'absolute',
+                                        bottom: -10,
+                                        right: -10,
+                                        bgcolor: 'background.paper'
+                                    }}
+                                >
+                                    <input
+                                        hidden
+                                        accept="image/*"
+                                        type="file"
+                                        onChange={handleImageUpload}
+                                    />
+                                    <PhotoCamera />
+                                </IconButton>
+                            </Box>
+                        </Box>
+
+                        <TextField
+                            fullWidth
+                            label="Username"
+                            variant="outlined"
+                            margin="normal"
+                            name="username"
+                            value={formData.username}
+                            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                            error={!!errors.username}
+                            helperText={errors.username}
+                        />
+
                         <TextField
                             fullWidth
                             label="Email"
@@ -176,6 +277,19 @@ export default function Signup() {
                             helperText={errors.confirmPassword}
                         />
 
+                        <TextField
+                            fullWidth
+                            label="Address"
+                            variant="outlined"
+                            margin="normal"
+                            name="address"
+                            value={formData.address}
+                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                            error={!!errors.address}
+                            helperText={errors.address}
+                            placeholder="Enter your full address"
+                        />
+
                         <Button
                             fullWidth
                             type="submit"
@@ -200,4 +314,4 @@ export default function Signup() {
             </Box>
         </ThemeProvider>
     );
-};
+}
