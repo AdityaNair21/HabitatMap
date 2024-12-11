@@ -82,7 +82,7 @@ export default function Login() {
             // Handle successful login
             const data = await response.json();
             localStorage.setItem('token', data.token);
-            navigate('/dashboard');
+            navigate('/');
         } catch (error) {
             setServerError(error.message);
         } finally {

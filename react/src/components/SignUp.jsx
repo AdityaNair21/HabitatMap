@@ -86,7 +86,11 @@ export default function Signup() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    username: formData.email.split('@')[0], // Generate a username from the email, or use a dedicated input if needed
+                    email: formData.email,
+                    password: formData.password,
+                }),
             });
 
             if (!response.ok) {
