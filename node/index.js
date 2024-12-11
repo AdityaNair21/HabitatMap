@@ -7,6 +7,7 @@ const cors = require('cors');
 const { connectMongoDb } = require('./connection.js');
 const { router: authRouter } = require('./routes/auth');
 const reportRouter = require('./routes/report.js');
+const animalRouter = require('./routes/animal');
 
 const app = express();
 const port = process.env.PORT;
