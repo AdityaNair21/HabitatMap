@@ -1,4 +1,8 @@
+import ReportSighting from './ReportSighting';
+
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
     Container,
     Box,
@@ -16,6 +20,7 @@ import {
     ThemeProvider,
     createTheme,
 } from '@mui/material';
+
 import { Upload as UploadIcon, Map as MapIcon } from '@mui/icons-material';
 
 // Create custom theme
@@ -108,6 +113,9 @@ const popularAnimals = [
 ];
 
 export default function Dashboard() {
+
+    const navigate = useNavigate();
+    
     const [sortBy, setSortBy] = React.useState('popularity');
     const [selectedSpecies, setSelectedSpecies] = React.useState('');
 
@@ -134,7 +142,7 @@ export default function Dashboard() {
                         }}
                     >
                         <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#ffffff' }}>
-                            Welcome Back [NAME]
+                            Welcome Back
                         </Typography>
                         <Button
                             variant="contained"
@@ -145,6 +153,7 @@ export default function Dashboard() {
                                     bgcolor: 'rgba(255, 255, 255, 0.2)',
                                 },
                             }}
+                            onClick={() => navigate('/map')} // Navigate to /map
                         >
                             Explore Map
                         </Button>
@@ -200,58 +209,7 @@ export default function Dashboard() {
                     <Grid container spacing={3}>
                         {/* Left Panel */}
                         <Grid item xs={12} md={6}>
-                            <Paper elevation={3} sx={{ p: 3 }}>
-                                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
-                                    Report New Sighting
-                                </Typography>
-                                <Select
-                                    fullWidth
-                                    value={selectedSpecies}
-                                    onChange={(e) => setSelectedSpecies(e.target.value)}
-                                    displayEmpty
-                                    sx={{ mb: 3 }}
-                                >
-                                    <MenuItem disabled value="">
-                                        Search Species
-                                    </MenuItem>
-                                    {dummySpecies.map((species) => (
-                                        <MenuItem key={species} value={species}>
-                                            {species}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-
-                                <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-                                    <Button
-                                        variant="outlined"
-                                        startIcon={<UploadIcon />}
-                                        fullWidth
-                                        sx={{ borderColor: 'primary.main' }}
-                                    >
-                                        Upload Image
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        startIcon={<MapIcon />}
-                                        fullWidth
-                                    >
-                                        Choose Location
-                                    </Button>
-                                </Box>
-
-                                <Typography
-                                    variant="subtitle1"
-                                    align="center"
-                                    sx={{
-                                        p: 2,
-                                        bgcolor: 'rgba(30, 136, 229, 0.1)',
-                                        borderRadius: 1,
-                                        color: 'text.secondary'
-                                    }}
-                                >
-                                    TIME AND DATE
-                                </Typography>
-                            </Paper>
+                            <ReportSighting />
                         </Grid>
 
                         {/* Right Panel */}
