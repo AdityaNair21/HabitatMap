@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
+import Signup from "./components/SignUp";
 import MapPage from "./components/MapPage";
 import AnimalPage from "./components/AnimalPage";
 import Dashboard from "./components/Dashboard"
@@ -11,6 +12,9 @@ export default function App() {
       <Routes>
         {/* Login page, user starts here */}
         <Route path="/login" element={<Login />} />
+
+        {/* Singup page, user starts here */}
+        <Route path="/signup" element={<Signup />} />
 
         {/* Home page */}
         <Route path="/" element={<Dashboard />} />

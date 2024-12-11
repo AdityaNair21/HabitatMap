@@ -1,4 +1,5 @@
-// Login.jsx
+
+// Signup.jsx
 import React, { useState } from 'react';
 import {
     Box,
@@ -13,6 +14,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+// Use the same theme as Login component
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
@@ -30,11 +32,12 @@ const darkTheme = createTheme({
     },
 });
 
-export default function Login() {
+export default function Signup() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
+        confirmPassword: '',
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
@@ -53,6 +56,17 @@ export default function Login() {
         // Password validation
         if (!formData.password) {
             newErrors.password = 'Password is required';
+        } else if (formData.password.length < 8) {
+            newErrors.password = 'Password must be at least 8 characters';
+        } else if (!/(?=.*[!@#$%^&*])/.test(formData.password)) {
+            newErrors.password = 'Password must contain at least one special character';
+        } else if (!/(?=.*\d)/.test(formData.password)) {
+            newErrors.password = 'Password must contain at least one number';
+        }
+
+        // Confirm password validation
+        if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match';
         }
 
         setErrors(newErrors);
@@ -67,7 +81,7 @@ export default function Login() {
 
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:3000/login', {
+            const response = await fetch('http://localhost:3000/createUser', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,13 +90,11 @@ export default function Login() {
             });
 
             if (!response.ok) {
-                throw new Error('Invalid credentials');
+                throw new Error('Failed to create account');
             }
 
-            // Handle successful login
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
-            navigate('/dashboard');
+            // Handle successful signup
+            navigate('/login');
         } catch (error) {
             setServerError(error.message);
         } finally {
@@ -112,7 +124,7 @@ export default function Login() {
                     }}
                 >
                     <Typography variant="h4" component="h1" align="center" gutterBottom>
-                        Login
+                        Sign Up
                     </Typography>
 
                     {serverError && (
@@ -147,6 +159,19 @@ export default function Login() {
                             helperText={errors.password}
                         />
 
+                        <TextField
+                            fullWidth
+                            label="Confirm Password"
+                            type="password"
+                            variant="outlined"
+                            margin="normal"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                            error={!!errors.confirmPassword}
+                            helperText={errors.confirmPassword}
+                        />
+
                         <Button
                             fullWidth
                             type="submit"
@@ -155,16 +180,16 @@ export default function Login() {
                             sx={{ mt: 3, mb: 2 }}
                             disabled={isLoading}
                         >
-                            {isLoading ? <CircularProgress size={24} /> : 'Login'}
+                            {isLoading ? <CircularProgress size={24} /> : 'Sign Up'}
                         </Button>
 
                         <Button
                             fullWidth
                             variant="text"
-                            onClick={() => navigate('/signup')}
+                            onClick={() => navigate('/login')}
                             sx={{ textTransform: 'none' }}
                         >
-                            Don't have an account? Sign up
+                            Already have an account? Login
                         </Button>
                     </form>
                 </Paper>
