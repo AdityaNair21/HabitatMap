@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Signup from "./components/SignUp";
 import MapPage from "./components/MapPage";
 import AnimalPage from "./components/AnimalPage";
+import AnimalsPage from "./components/AnimalsPage";
 import Dashboard from "./components/Dashboard"
 
 export default function App() {
@@ -24,6 +25,9 @@ export default function App() {
 
         {/* Animal page with dynamic id */}
         <Route path="/animal/:id" element={<AnimalPage />} />
+
+        {/* Animal page Index */}
+        <Route path="/animal" element={<AnimalsPage />} />
       </Routes>
     </BrowserRouter>
   );
