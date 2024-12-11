@@ -58,6 +58,7 @@ async function getReportsBySpeciesId(req, res, next) {
 
 async function createReport(req, res, next) {
     try {
+        console.log(req.body)
         const report = await Report.create(req.body);
         return res.status(201).json(report);
     } catch (error) {

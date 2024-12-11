@@ -114,8 +114,9 @@ const popularAnimals = [
 
 export default function Dashboard() {
 
+
     const navigate = useNavigate();
-    
+
     const [sortBy, setSortBy] = React.useState('popularity');
     const [selectedSpecies, setSelectedSpecies] = React.useState('');
 
@@ -142,7 +143,7 @@ export default function Dashboard() {
                         }}
                     >
                         <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#ffffff' }}>
-                            Welcome Back
+                            Welcome Back {JSON.parse(localStorage.getItem('user'))?.username}
                         </Typography>
                         <Button
                             variant="contained"

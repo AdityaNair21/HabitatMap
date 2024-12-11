@@ -4,7 +4,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/user');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Middleware for error handling
 const asyncHandler = fn => (req, res, next) => {
@@ -13,7 +13,7 @@ const asyncHandler = fn => (req, res, next) => {
 
 // Create new user
 router.post('/createUser', asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, loc, picUrl } = req.body;
 
 
 
@@ -35,8 +35,9 @@ router.post('/createUser', asyncHandler(async (req, res) => {
         username,
         email,
         password,
+        picUrl,
         pinnedSpecies: [],
-        loc: { lat: null, lon: null }
+        loc,
     });
 
     await user.save();
