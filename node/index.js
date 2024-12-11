@@ -23,10 +23,14 @@ app.use(express.json());
 app.use('/', authRouter);  // Authentication routes
 app.use('/reports', reportRouter);  // Report routes
 
-// Error handling middleware
+// Global error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+  const errRes = {
+    status: err.status || 500,
+    message: err.message || 'Something went wrong!'
+  };
+  return res.status(errRes.status).json(errRes);
 });
 
 app.listen(port, () => {

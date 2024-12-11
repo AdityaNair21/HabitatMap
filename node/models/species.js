@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // Define the schema for a species
 const SpeciesSchema = new mongoose.Schema({
     commonName: {type: String, required: true},
-    scientificName: {type: String, required: true},
+    scientificName: {type: String, required: true, unique: true},
     description: {type: String, required: true},
     picUrl: {type: String, required: true},
     /* naturalHabitat: {loc: {
