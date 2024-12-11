@@ -6,8 +6,8 @@ import Signup from "./components/SignUp";
 import MapPage from "./components/MapPage";
 import AnimalPage from "./components/AnimalPage";
 import AnimalsPage from "./components/AnimalsPage";
-import Dashboard from "./components/Dashboard";
-import ProfilePage from "./components/ProfilePage";
+import Dashboard from "./components/Dashboard"
+import CreateReport from "./components/CreateReport";
 
 export default function App() {
   // Check if the user is logged in (user object in localStorage)
@@ -28,12 +28,22 @@ export default function App() {
         <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/" />} />
         <Route path="/signup" element={!isAuthenticated ? <Signup /> : <Navigate to="/" />} />
 
-        {/* Redirect other routes if the user is not authenticated */}
-        <Route path="/" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/map" element={isAuthenticated ? <MapPage /> : <Navigate to="/login" />} />
-        <Route path="/profile" element={isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />} />
-        <Route path="/animal/:id" element={isAuthenticated ? <AnimalPage /> : <Navigate to="/login" />} />
-        <Route path="/animal" element={isAuthenticated ? <AnimalsPage /> : <Navigate to="/login" />} />
+        {/* Singup page, user starts here */}
+        <Route path="/signup" element={<Signup />} />
+        {/* Wrapping authenticated routes with CreateReport from all pages user can create report*/}
+        <Route element={<CreateReport />}>
+          {/* Home page */}
+          <Route path="/" element={<Dashboard />} />
+
+          {/* Map page */}
+          <Route path="/map" element={<MapPage />} />
+
+          {/* Animal page with dynamic id */}
+          <Route path="/animal/:id" element={<AnimalPage />} />
+
+          {/* Animal page Index */}
+          <Route path="/animal" element={<AnimalsPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
