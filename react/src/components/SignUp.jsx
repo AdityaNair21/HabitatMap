@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PhotoCamera } from '@mui/icons-material';
+import axios from 'axios';
 
 const OPENCAGE_API_KEY = "b50efeef55dc49b78813357c994656c1";
 
@@ -47,6 +48,7 @@ export default function Signup() {
     const [isLoading, setIsLoading] = useState(false);
     const [serverError, setServerError] = useState('');
     const [previewImage, setPreviewImage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const validateForm = () => {
         const newErrors = {};
@@ -85,38 +87,29 @@ export default function Signup() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleImageUpload = async (event) => {
+    const handleImageUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
+            setSelectedFile(file);
+
             // Create a preview for the UI
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewImage(reader.result);
             };
             reader.readAsDataURL(file);
-
-            // In a real app, you'd upload to a cloud storage service
-            // For now, we'll use a dummy URL
-            setFormData(prev => ({
-                ...prev,
-                picUrl: URL.createObjectURL(file)
-            }));
         }
     };
 
     const geocodeAddress = async (address) => {
         try {
-            // const response = await fetch(
-            //     `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${OPENCAGE_API_KEY}`
-            // );
             const response = await fetch(
-                `https://api.opencagedata.com/geocode/v1/json?q=4771+La+Cresta+Way+San+Jose&key=${OPENCAGE_API_KEY}`
+                `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${OPENCAGE_API_KEY}`
             );
             const data = await response.json();
 
             if (data.results && data.results.length > 0) {
-                const { lat, lng } = data.results[0].bounds.northeast;
-                console.log(lat, lng)
+                const { lat, lng } = data.results[0].geometry;
                 return { lat, lon: lng };
             }
             throw new Error('Address not found');
@@ -136,31 +129,35 @@ export default function Signup() {
         try {
             // First, geocode the address
             const coordinates = await geocodeAddress(formData.address);
-            console.log("Coordinates: " + JSON.stringify(coordinates, null, 2))
 
-            const response = await fetch('http://localhost:3000/createUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: formData.username,
-                    email: formData.email,
-                    password: formData.password,
-                    picUrl: formData.picUrl,
-                    pinnedSpecies: [],
-                    loc: coordinates
-                }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to create account');
+            // Create FormData object to send file and other data
+            const formDataToSend = new FormData();
+            if (selectedFile) {
+                formDataToSend.append('profilePicture', selectedFile);
             }
+            formDataToSend.append('username', formData.username);
+            formDataToSend.append('email', formData.email);
+            formDataToSend.append('password', formData.password);
+            formDataToSend.append('loc', JSON.stringify(coordinates));
+            formDataToSend.append('pinnedSpecies', JSON.stringify([]));
 
-            navigate('/login');
+            // Send the form data to the server
+            const response = await axios.post('http://localhost:3000/createUser',
+                formDataToSend,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );
+
+            if (response.status === 201) {
+                navigate('/login');
+            } else {
+                throw new Error('Failed to create account');
+            }
         } catch (error) {
-            setServerError(error.message);
+            setServerError(error.response?.data?.error || error.message);
         } finally {
             setIsLoading(false);
         }

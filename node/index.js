@@ -14,13 +14,14 @@ const port = process.env.PORT;
 // Connect to MongoDB
 connectMongoDb(process.env.MONGO_URL)
   .then(() => console.log('Connected to MongoDB'));
-  //.catch((err) => console.error('Could not connect to MongoDB:\n' +
-  //  'Check if db container is running and mongodb service is up. ' +
-  //  'If there is still an issue read this error msg:\n\n', err));
+//.catch((err) => console.error('Could not connect to MongoDB:\n' +
+//  'Check if db container is running and mongodb service is up. ' +
+//  'If there is still an issue read this error msg:\n\n', err));
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
 // Routes
 app.use('/', authRouter);  // Authentication routes

@@ -86,6 +86,10 @@ export default function Login() {
             localStorage.setItem('user', JSON.stringify({
                 userId: data.user.id,
                 username: data.user.username,
+                email: data.user.email,
+                picUrl: data.user.picUrl,
+                pinnedSpecies: data.user.pinnedSpecies,
+                loc: data.user.loc
             }));
 
             navigate('/');
