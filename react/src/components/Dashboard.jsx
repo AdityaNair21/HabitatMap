@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
     Container,
     Box,
@@ -16,6 +18,7 @@ import {
     ThemeProvider,
     createTheme,
 } from '@mui/material';
+
 import { Upload as UploadIcon, Map as MapIcon } from '@mui/icons-material';
 
 // Create custom theme
@@ -108,6 +111,9 @@ const popularAnimals = [
 ];
 
 export default function Dashboard() {
+
+    const navigate = useNavigate();
+    
     const [sortBy, setSortBy] = React.useState('popularity');
     const [selectedSpecies, setSelectedSpecies] = React.useState('');
 
@@ -145,6 +151,7 @@ export default function Dashboard() {
                                     bgcolor: 'rgba(255, 255, 255, 0.2)',
                                 },
                             }}
+                            onClick={() => navigate('/map')} // Navigate to /map
                         >
                             Explore Map
                         </Button>

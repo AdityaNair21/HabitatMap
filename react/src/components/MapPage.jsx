@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Container, Typography, Paper, IconButton, TextField, Box } from '@mui/material';
+import { Container, Typography, Paper, IconButton, TextField, Box, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Map, { Marker, Popup } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+
 
 const speciesData = [
     { id: 1, type: "Mammal", name: "Coyote", image: "/images/coyote.jpg" },
@@ -21,6 +23,7 @@ const reportData = [
 const MAPBOX_TOKEN = 'pk.eyJ1IjoicnlhdmFyaSIsImEiOiJjbTIzcWhqd2kwOGgxMnNwdTRpZHk4d3AwIn0.BtkK_oWDRBTrWqiGl6qq6w'; // MapBox access token 
 
 export default function MapPage() {
+    const navigate = useNavigate(); // Use the hook for navigation
     const [viewport, setViewport] = useState({
         latitude: 37.7749,
         longitude: -122.4194,
@@ -38,6 +41,8 @@ export default function MapPage() {
 
     return (
         <Box sx={{ height: '100vh', width: '100vw', position: 'relative', overflow: 'hidden' }}>
+            
+            
             {/* Floating Header */}
             <Box
                 sx={{
@@ -51,9 +56,36 @@ export default function MapPage() {
                     borderRadius: '8px',
                     display: 'flex',
                     alignItems: 'center',
+                    gap: 2
                 }}
             >
                 <Typography variant="h5" fontWeight="bold">HabitatMap</Typography>
+            </Box>
+
+
+            {/* Separate Floating Button at Top Right */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 20,
+                    right: 20, // Position the button at the top-right
+                    zIndex: 1,
+                }}
+            >
+                <Button
+                    variant="contained"
+                    onClick={() => navigate('/')}
+                    sx={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        color: 'white',
+                        '&:hover': {
+                            bgcolor: 'rgba(0, 0, 0, 255)',
+                        },
+                        textTransform: 'none',
+                    }}
+                >
+                    Back to Dashboard
+                </Button>
             </Box>
 
             {/* Floating Centered Search Bar */}
