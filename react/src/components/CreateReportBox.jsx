@@ -18,6 +18,7 @@ import Map, { Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function CreateReportBox({ open, handleClose }) {
     const [formData, setFormData] = useState({
@@ -103,7 +104,7 @@ export default function CreateReportBox({ open, handleClose }) {
         if (value.length < 3) return; // Minimum 3 characters to search
         setSpeciesLoading(true);
         try {                               //using temp api for testing species search
-            const response = await axios.get(`http://localhost:3000/species/search?query=${value}`);
+            const response = await axios.get(`${API_BASE_URL}/species/search?query=${value}`);
             console.log('Species search response:', response.data); // Debugging statement
             setSpeciesOptions(response.data);
         } catch (error) {
@@ -177,7 +178,7 @@ export default function CreateReportBox({ open, handleClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.post('http://localhost:3000/reports', formData);
+            await axios.post('${API_BASE_URL}/reports', formData);
             handleClose();
         } catch (error) {
             console.error('Error creating report:', error);
