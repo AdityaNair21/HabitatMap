@@ -81,7 +81,13 @@ export default function Login() {
 
             // Handle successful login
             const data = await response.json();
+            // Save token and user details in localStorage
             localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify({
+                userId: data.user.id,
+                username: data.user.username,
+            }));
+
             navigate('/');
         } catch (error) {
             setServerError(error.message);
