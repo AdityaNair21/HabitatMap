@@ -93,14 +93,16 @@ async function getReportsBySearch(req, res, next) {
     }
 
     try {
-        const reports = await Report.find({ $text: { $search: `"${speciesName}"` }, 
-                                            loc: {
-                                                $geoWithin: {
-                                                    $centerSphere: 
-                                                        [[userLon, userLat], 
-                                                        convertMilesToRadians(Number(speciesRadius))]
-                                                }
-                                            } });
+        const reports = await Report.find({
+            $text: { $search: `"${speciesName}"` },
+            loc: {
+                $geoWithin: {
+                    $centerSphere:
+                        [[userLon, userLat],
+                        convertMilesToRadians(Number(speciesRadius))]
+                }
+            }
+        });
 
         checkForEmptyReports(reports, next);
         return res.status(200).json(reports);

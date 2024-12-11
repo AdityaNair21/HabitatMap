@@ -4,29 +4,29 @@ const mongoose = require('mongoose');
 const ReportSchema = new mongoose.Schema({
     // user aggregate 
     user: {
-        userId: {type: String, required: true},
-        username: {type: String, required: true},
-        picUrl: {type: String, required: true}
+        userId: { type: String, required: true },
+        username: { type: String, required: true },
+        picUrl: { type: String, required: true }
     },
     // species aggregate. This information will rarely change.
     species: {
-        speciesId: {type: String, required: true},
-        commonName: {type: String, required: true},
-        scientificName: {type: String, required: true},
-        description: {type: String, required: true},
-        picUrl: {type: String, required: true}
+        speciesId: { type: String, required: true },
+        commonName: { type: String, required: true },
+        scientificName: { type: String, required: true },
+        description: { type: String, required: true },
+        picUrl: { type: String, required: true }
     },
     loc: {
-        type: {type: String, default: 'Point'},
-        coordinates: {type: [Number], required: true},
+        type: { type: String, default: 'Point' },
+        coordinates: { type: [Number], required: true },
     },
-    description: {type: String},
-    picUrl: [{type: String}],
-}, 
-{timestamps: true});
+    description: { type: String },
+    picUrl: [{ type: String }],
+},
+    { timestamps: true });
 
-ReportSchema.index({"species.commonName": 'text', "species.scientificName": 'text'});
-ReportSchema.index({loc: '2dsphere'});
+ReportSchema.index({ "species.commonName": 'text', "species.scientificName": 'text' });
+ReportSchema.index({ loc: '2dsphere' });
 
 // Create a model from the schema
 const Report = mongoose.model('Reports', ReportSchema);
