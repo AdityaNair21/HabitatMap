@@ -12,7 +12,7 @@ services:
       - /usr/src/app/node_modules
     tty: true
     ports:
-      - "3000:3000"
+      - "7000:3000"
     command: npm run start
     depends_on:
       - db
@@ -29,7 +29,7 @@ services:
       - /usr/src/app/node_modules
     tty: true
     ports:
-      - "5173:5173"
+      - "6000:5173"
     command: npm run dev
 
   db:
@@ -42,7 +42,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=password
       - MONGODB_LOG_VERBOSITY=0
-    command: mongod --logpath /dev/null # Disables logging to stdout
+    command: mongod --logpath /dev/null
     ports:
       - "27017:27017"
     networks:
