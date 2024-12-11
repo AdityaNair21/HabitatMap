@@ -1,4 +1,7 @@
 // index.js (main Express app)
+
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const { connectMongoDb } = require('./connection.js');
@@ -6,14 +9,14 @@ const { router: authRouter } = require('./routes/auth');
 const reportRouter = require('./routes/report.js');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 // Connect to MongoDB
-connectMongoDb('mongodb://root:password@localhost:27017/habitatmap')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('Could not connect to MongoDB:\n' +
-    'Check if db container is running and mongodb service is up. ' +
-    'If there is still an issue read this error msg:\n\n', err));
+connectMongoDb(process.env.MONGO_URL)
+  .then(() => console.log('Connected to MongoDB'));
+  //.catch((err) => console.error('Could not connect to MongoDB:\n' +
+  //  'Check if db container is running and mongodb service is up. ' +
+  //  'If there is still an issue read this error msg:\n\n', err));
 
 // Middleware
 app.use(cors());

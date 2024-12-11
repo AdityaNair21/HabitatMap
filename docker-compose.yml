@@ -48,6 +48,21 @@ services:
     networks:
       - node-network
 
+  db-admin:
+    image: mongo-express
+    container_name: db-admin
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=db
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+    networks:
+      - node-network
+
   nginx:
     build:
       context: ./nginx
