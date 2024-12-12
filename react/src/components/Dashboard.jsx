@@ -13,8 +13,10 @@ import {
     Card,
     CardContent,
     CardMedia,
+    IconButton,
     Select,
     MenuItem,
+    Avatar,
     ToggleButtonGroup,
     ToggleButton,
     ThemeProvider,
@@ -112,6 +114,8 @@ const popularAnimals = [
     }
 ];
 
+const user = JSON.parse(localStorage.getItem('user'));
+
 export default function Dashboard() {
 
 
@@ -142,9 +146,31 @@ export default function Dashboard() {
                             background: 'linear-gradient(to right, #1a237e, #1e88e5)',
                         }}
                     >
-                        <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#ffffff' }}>
-                            Welcome Back {JSON.parse(localStorage.getItem('user'))?.username}
-                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <IconButton
+                                sx={{
+                                    bgcolor: 'rgba(255, 255, 255, 0.2)',
+                                    mr: 2,
+                                    '&:hover': {
+                                        bgcolor: 'rgba(255, 255, 255, 0.3)',
+                                    },
+                                }}
+                                onClick={() => navigate('/profile')}
+                            >
+                                {/* <Avatar
+                                    src={user?.picUrl ? `http://localhost:3000${user?.picUrl}` : undefined}
+                                    alt={user?.username || 'User'}
+                                    sx={{ width: 40, height: 40 }}
+                                >
+                                    {user?.username ? user.username[0].toUpperCase() : 'U'}
+                                </Avatar> */}
+                            </IconButton>
+                            <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#ffffff' }}>
+                                Welcome Back {user?.username}
+                            </Typography>
+                        </Box>
+
+
                         <Button
                             variant="contained"
                             startIcon={<MapIcon />}
