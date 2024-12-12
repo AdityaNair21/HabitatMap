@@ -78,14 +78,14 @@ const pinnedAnimals = [
         name: 'Snail Egg Cluster',
         sightings: 16,
         percentage: 15,
-        image: '/path/to/snail-egg.jpg',
+        image: '/images/snaileggcluster.jpg',
         location: 'Urban Gardens'
     },
     {
         name: 'Scary Rat',
         sightings: 3,
         percentage: 5,
-        image: '/path/to/rat.jpg',
+        image: '/images/scary_rat.jpg',
         location: 'Downtown Area'
     }
 ];
@@ -95,21 +95,21 @@ const popularAnimals = [
         name: 'Garden Snail',
         sightings: 24,
         percentage: 20,
-        image: '/path/to/garden-snail.jpg',
+        image: '/images/gardensnail.jpg',
         location: 'Suburban Areas'
     },
     {
         name: 'House Mouse',
         sightings: 18,
         percentage: 12,
-        image: '/path/to/house-mouse.jpg',
+        image: '/images/house_mouse.jpg',
         location: 'Residential Zones'
     },
     {
         name: 'Norway Rat',
         sightings: 15,
         percentage: 8,
-        image: '/path/to/norway-rat.jpg',
+        image: '/images/norway_rat.jpg',
         location: 'Waterfront'
     }
 ];

@@ -83,7 +83,7 @@ export default function App() {
         <Route path="/signup" element={<Signup />} />
 
         {/* Protected Routes with CreateReport Wrapper */}
-        <Route element={<ProtectedReportWrapper />}>
+        <Route element={<CreateReport />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/profile" element={<ProfilePage />} />
