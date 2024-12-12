@@ -2,20 +2,102 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const { User } = require('../models/user');
 
 const JWT_SECRET = process.env.JWT_SECRET;
+
+// Configure multer for file upload
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const dir = 'public/images';
+        // Create directory if it doesn't exist
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
+    },
+    filename: function (req, file, cb) {
+        // Create unique filename using username (if available) and timestamp
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'pfp-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+// Middleware to protect routes
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: 'Access denied. No token provided.' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        res.status(403).json({ error: 'Invalid token' });
+    }
+};
+
+const upload = multer({ storage: storage });
 
 // Middleware for error handling
 const asyncHandler = fn => (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next);
 };
 
+// Update existing user
+router.put('/updateUser', authenticateToken, asyncHandler(async (req, res) => {
+    const { userId } = req.user;
+    const { username, email, password, loc, profilePicture } = req.body;
+
+    try {
+        // Find the user by ID
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Update the user's information
+        user.username = username || user.username;
+        user.email = email || user.email;
+        if (password) {
+            user.password = password;
+        }
+        user.loc = loc ? JSON.parse(loc) : user.loc;
+        if (profilePicture) {
+            user.picUrl = `/images/${profilePicture.filename}`;
+        }
+
+        await user.save();
+
+        res.json({
+            message: 'User updated successfully',
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                picUrl: user.picUrl,
+                pinnedSpecies: user.pinnedSpecies,
+                loc: user.loc
+            }
+        });
+    } catch (error) {
+        // Handle errors
+        console.error(error);
+        res.status(500).json({ error: 'Error updating user' });
+    }
+}));
+
 // Create new user
-router.post('/createUser', asyncHandler(async (req, res) => {
-    const { username, email, password, loc, picUrl } = req.body;
-
-
+router.post('/createUser', upload.single('profilePicture'), asyncHandler(async (req, res) => {
+    const { username, email, password, loc } = req.body;
 
     // Check if user or email already exists
     const existingUser = await User.findOne({
@@ -23,6 +105,10 @@ router.post('/createUser', asyncHandler(async (req, res) => {
     });
 
     if (existingUser) {
+        // Remove uploaded file if user creation fails
+        if (req.file) {
+            fs.unlinkSync(req.file.path);
+        }
         return res.status(400).json({
             error: existingUser.email === email ?
                 'Email already registered' :
@@ -35,9 +121,9 @@ router.post('/createUser', asyncHandler(async (req, res) => {
         username,
         email,
         password,
-        picUrl,
+        picUrl: req.file ? `/images/${req.file.filename}` : null,
         pinnedSpecies: [],
-        loc,
+        loc: JSON.parse(loc),
     });
 
     await user.save();
@@ -84,22 +170,8 @@ router.post('/login', asyncHandler(async (req, res) => {
     });
 }));
 
-// Middleware to protect routes
-const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) {
-        return res.status(401).json({ error: 'Access denied. No token provided.' });
-    }
 
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (error) {
-        res.status(403).json({ error: 'Invalid token' });
-    }
-};
+
 
 module.exports = { router, authenticateToken };

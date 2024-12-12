@@ -1,5 +1,6 @@
 const { Report } = require('../models/report.js');
 
+
 function checkForEmptyReports(reports, next) {
     if (reports.length === 0) {
         const error = new Error('No reports found');
@@ -21,6 +22,8 @@ async function getReports(req, res, next) {
         next(error);
     }
 }
+
+
 
 async function getReportById(req, res, next) {
     try {
