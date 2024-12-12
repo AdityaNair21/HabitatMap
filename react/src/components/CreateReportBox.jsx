@@ -178,7 +178,7 @@ export default function CreateReportBox({ open, handleClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.post('${API_BASE_URL}/reports', formData);
+            await axios.post(`${API_BASE_URL}/reports`, formData);
             handleClose();
         } catch (error) {
             console.error('Error creating report:', error);

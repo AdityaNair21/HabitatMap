@@ -11,6 +11,8 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function MapPage() {
     const navigate = useNavigate();
+    const REFRESH_INTERVAL = 1000; // 1 second refresh
+
     const [viewport, setViewport] = useState({
         latitude: 37.7749,
         longitude: -122.4194,
@@ -23,20 +25,13 @@ export default function MapPage() {
     const [searchInput, setSearchInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [searchRadius, setSearchRadius] = useState(5); // Default 5 mile radius
+    const [searchRadius, setSearchRadius] = useState(5);
 
     const getMarkerColor = (speciesName) => {
         const colors = [
-            '#FF5733', // Red-Orange
-            '#33FF57', // Green
-            '#3357FF', // Blue
-            '#FF33F5', // Pink
-            '#33FFF5', // Cyan
-            '#FFB533', // Orange
-            '#B533FF', // Purple
-            '#FF3333', // Red
-            '#33FFB5', // Mint
-            '#5733FF', // Indigo
+            '#FF5733', '#33FF57', '#3357FF', '#FF33F5', 
+            '#33FFF5', '#FFB533', '#B533FF', '#FF3333', 
+            '#33FFB5', '#5733FF',
         ];
         
         const hash = speciesName.split('')
@@ -45,46 +40,76 @@ export default function MapPage() {
         return colors[hash % colors.length];
     };
 
-    // Fetch all reports on component mount
+    // Auto-refresh effect
     useEffect(() => {
+        // Initial fetch
         fetchReports();
-    }, []);
 
-    // Fetch reports based on search criteria
+        // Set up interval for periodic refresh
+        const intervalId = setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                if (!searchInput.trim()) {
+                    fetchReports();
+                } else {
+                    searchReports();
+                }
+            }
+        }, REFRESH_INTERVAL);
+
+        // Visibility change handler
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                if (!searchInput.trim()) {
+                    fetchReports();
+                } else {
+                    searchReports();
+                }
+            }
+        };
+
+        // Add visibility change listener
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        // Cleanup
+        return () => {
+            clearInterval(intervalId);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [searchInput]); // Added searchInput as dependency
+
+    // Search effect
     useEffect(() => {
         if (searchInput.trim()) {
             const delayDebounceFn = setTimeout(() => {
                 searchReports();
             }, 500);
             return () => clearTimeout(delayDebounceFn);
-        } else {
-            fetchReports();
         }
     }, [searchInput]);
 
     const fetchReports = async () => {
-        setLoading(true);
-        setError(null);
         try {
             const response = await axios.get(`${API_BASE_URL}/reports`);
-            setReports(response.data);
             
-            // Extract unique species from reports
-            const species = [...new Set(response.data.map(report => 
-                report.species.commonName
-            ))];
-            setUniqueSpecies(species);
+            // Only update state if data has changed
+            if (JSON.stringify(response.data) !== JSON.stringify(reports)) {
+                setReports(response.data);
+                
+                // Extract unique species from reports
+                const species = [...new Set(response.data.map(report => 
+                    report.species.commonName
+                ))];
+                setUniqueSpecies(species);
+            }
         } catch (err) {
-            setError('Failed to fetch reports: ' + err.message);
             console.error('Error fetching reports:', err);
-        } finally {
-            setLoading(false);
+            if (!reports.length) {
+                setError('Failed to fetch reports: ' + err.message);
+            }
         }
     };
 
     const searchReports = async () => {
-        setLoading(true);
-        setError(null);
         try {
             const response = await axios.get(`${API_BASE_URL}/reports/search`, {
                 params: {
@@ -94,18 +119,22 @@ export default function MapPage() {
                     speciesRadius: searchRadius
                 }
             });
-            setReports(response.data);
             
-            // Update unique species for filtered results
-            const species = [...new Set(response.data.map(report => 
-                report.species.commonName
-            ))];
-            setUniqueSpecies(species);
+            // Only update state if data has changed
+            if (JSON.stringify(response.data) !== JSON.stringify(reports)) {
+                setReports(response.data);
+                
+                // Update unique species for filtered results
+                const species = [...new Set(response.data.map(report => 
+                    report.species.commonName
+                ))];
+                setUniqueSpecies(species);
+            }
         } catch (err) {
-            setError('Failed to search reports: ' + err.message);
             console.error('Error searching reports:', err);
-        } finally {
-            setLoading(false);
+            if (!reports.length) {
+                setError('Failed to search reports: ' + err.message);
+            }
         }
     };
 
@@ -268,6 +297,9 @@ export default function MapPage() {
                             </Typography>
                             <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                                 Reported by: {popupInfo.user.username}
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)', display: 'block' }}>
+                                Reported on: {new Date(popupInfo.createdAt).toLocaleString()}
                             </Typography>
                         </Box>
                     </Popup>
