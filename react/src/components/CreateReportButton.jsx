@@ -3,8 +3,8 @@ import AddIcon from '@mui/icons-material/Add';
 
 export default function CreateReportButton({ onClick }) {
     return (
-        <Fab 
-            color="primary" 
+        <Fab
+            color="primary"
             aria-label="add"
             onClick={onClick}
             sx={{

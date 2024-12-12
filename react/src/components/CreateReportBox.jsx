@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { 
-    Dialog, 
-    DialogTitle, 
+import {
+    Dialog,
+    DialogTitle,
     DialogContent,
     DialogActions,
     TextField,
@@ -40,7 +40,7 @@ export default function CreateReportBox({ open, handleClose }) {
         description: '',
         picUrl: ['']
     });
-    
+
     const [previewUrls, setPreviewUrls] = useState([]);
     const [loading, setLoading] = useState(false);
     const [speciesOptions, setSpeciesOptions] = useState([]);
@@ -149,7 +149,7 @@ export default function CreateReportBox({ open, handleClose }) {
             });
             //this will keep map open after pinning location
             //pressing close will close the map
-            setMapOpen(true); 
+            setMapOpen(true);
         } else {
             console.error('Invalid lngLat:', event.lngLat);
         }
@@ -178,7 +178,7 @@ export default function CreateReportBox({ open, handleClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.post('${API_BASE_URL}/reports', formData);
+            await axios.post(`${API_BASE_URL}/reports`, formData);
             handleClose();
         } catch (error) {
             console.error('Error creating report:', error);

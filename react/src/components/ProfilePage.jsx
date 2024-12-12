@@ -34,6 +34,8 @@ const darkTheme = createTheme({
     },
 });
 
+const user = JSON.parse(localStorage.getItem('user'));
+
 export default function ProfilePage() {
 
     const navigate = useNavigate();
@@ -136,9 +138,11 @@ export default function ProfilePage() {
                                     sx={{ width: 100, height: 100, mr: 3 }}
                                 />
                             ) : (
-                                <Avatar sx={{ width: 100, height: 100, mr: 3 }}>
-                                    <PersonIcon sx={{ fontSize: 60 }} />
-                                </Avatar>
+                                <Avatar
+                                    src={`http://localhost:3000${user?.picUrl}` || '/path/to/default-avatar.jpg'}
+                                    alt={user?.username || 'User'}
+                                    sx={{ width: 40, height: 40 }}
+                                />
                             )}
                             <Typography variant="h4" component="h1">
                                 Profile Settings

@@ -157,11 +157,13 @@ export default function Dashboard() {
                                 }}
                                 onClick={() => navigate('/profile')}
                             >
-                                <Avatar
-                                    src={`http://localhost:3000${user?.picUrl}` || '/path/to/default-avatar.jpg'}
+                                {/* <Avatar
+                                    src={user?.picUrl ? `http://localhost:3000${user?.picUrl}` : undefined}
                                     alt={user?.username || 'User'}
                                     sx={{ width: 40, height: 40 }}
-                                />
+                                >
+                                    {user?.username ? user.username[0].toUpperCase() : 'U'}
+                                </Avatar> */}
                             </IconButton>
                             <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#ffffff' }}>
                                 Welcome Back {user?.username}
