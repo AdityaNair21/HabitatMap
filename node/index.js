@@ -55,17 +55,3 @@ app.listen(port, () => {
 });
 
 
-
-
-
-const {Report} = require('./models/report.js');
-
-//Only for testing purposes
-app.get('/species/search', async (req, res) => {
-  const q = req.query.query;
-  console.log(q);
-  const species = await Report.find({ 'species.commonName': { $regex: q, $options: 'i' }}, {'species': 1, '_id': 0});
-  const flattenedSpecies = species.map(sp => sp.species);
-  console.log(flattenedSpecies);
-  res.status(200).json(flattenedSpecies);
-});
