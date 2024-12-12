@@ -139,7 +139,7 @@ export default function ProfilePage() {
                                 />
                             ) : (
                                 <Avatar
-                                    src={`http://localhost:3000${user?.picUrl}` || '/path/to/default-avatar.jpg'}
+                                    src={'/images/aditya.JPG'}
                                     alt={user?.username || 'User'}
                                     sx={{ width: 40, height: 40 }}
                                 />

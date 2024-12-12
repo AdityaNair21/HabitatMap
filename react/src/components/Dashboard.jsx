@@ -157,16 +157,16 @@ export default function Dashboard() {
                                 }}
                                 onClick={() => navigate('/profile')}
                             >
-                                {/* <Avatar
-                                    src={user?.picUrl ? `http://localhost:3000${user?.picUrl}` : undefined}
+                                <Avatar
+                                    src={'/images/aditya.JPG'}
                                     alt={user?.username || 'User'}
                                     sx={{ width: 40, height: 40 }}
                                 >
                                     {user?.username ? user.username[0].toUpperCase() : 'U'}
-                                </Avatar> */}
+                                </Avatar>
                             </IconButton>
                             <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#ffffff' }}>
-                                Welcome Back {user?.username}
+                                Welcome Back Aditya {user?.username}
                             </Typography>
                         </Box>
 
