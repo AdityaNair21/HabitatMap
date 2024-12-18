@@ -1,0 +1,255 @@
+[
+  {
+    "username": "sf_wildlife_spotter",
+    "email": "sf_wildlife@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2015/01/08/18/29/entrepreneur-593358_960_720.jpg",
+    "pinnedSpecies": ["California Sea Lion", "Brown Pelican"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-122.4194, 37.7749]
+    }
+  },
+  {
+    "username": "yosemite_ranger",
+    "email": "yosemite_ranger@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2016/11/21/12/42/beard-1845166_960_720.jpg",
+    "pinnedSpecies": ["Black Bear", "Sierra Nevada Bighorn Sheep"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-119.5383, 37.8651]
+    }
+  },
+  {
+    "username": "desert_photographer",
+    "email": "desert_photo@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2019/11/07/17/07/photographer-4609311_960_720.jpg",
+    "pinnedSpecies": ["Desert Tortoise", "Mojave Rattlesnake"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-115.9009, 34.8697]
+    }
+  },
+  {
+    "username": "sf_wildlife_spotter",
+    "email": "sf_wildlife@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2015/01/08/18/29/entrepreneur-593358_960_720.jpg",
+    "pinnedSpecies": ["California Sea Lion", "Brown Pelican"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-122.4194, 37.7749]
+    }
+  },
+  {
+    "username": "yosemite_tracker",
+    "email": "yosemite_tracker@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2016/11/21/12/42/beard-1845166_960_720.jpg",
+    "pinnedSpecies": ["Black Bear", "Sierra Nevada Bighorn Sheep"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-119.5383, 37.8651]
+    }
+  },
+  {
+    "username": "desert_lens",
+    "email": "desert_lens@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2019/11/07/17/07/photographer-4609311_960_720.jpg",
+    "pinnedSpecies": ["Desert Tortoise", "Mojave Rattlesnake"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-115.9009, 34.8697]
+    }
+  },
+  {
+    "username": "redwood_wanderer",
+    "email": "redwood_wanderer@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2017/08/01/08/29/people-2563491_960_720.jpg",
+    "pinnedSpecies": ["Northern Spotted Owl", "Marbled Murrelet"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-124.0046, 41.2132]
+    }
+  },
+  {
+    "username": "tahoe_naturalist",
+    "email": "tahoe_naturalist@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2016/11/29/09/38/adult-1868750_960_720.jpg",
+    "pinnedSpecies": ["Mountain Chickadee", "Yellow-bellied Marmot"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-120.0324, 39.0968]
+    }
+  },
+  {
+    "username": "valley_birder",
+    "email": "valley_birder@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
+    "pinnedSpecies": ["Sandhill Crane", "Swainson's Hawk"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-121.4944, 38.5816]
+    }
+  },
+  {
+    "username": "coastal_observer",
+    "email": "coastal_observer@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2017/08/01/08/29/people-2563491_960_720.jpg",
+    "pinnedSpecies": ["Sea Otter", "California Least Tern"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-121.8947, 36.6002]
+    }
+  },
+  {
+    "username": "sierra_tracker",
+    "email": "sierra_tracker@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2016/11/21/12/42/beard-1845166_960_720.jpg",
+    "pinnedSpecies": ["Golden Eagle", "Mountain Lion"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-119.4179, 36.7783]
+    }
+  },
+  {
+    "username": "sf_birder",
+    "email": "sf_birder@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2015/01/08/18/29/entrepreneur-593358_960_720.jpg",
+    "pinnedSpecies": ["Western Gull", "Brown Pelican"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-122.4194, 37.7749]
+    }
+  },
+  {
+    "username": "golden_gate_naturalist",
+    "email": "gg_naturalist@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2016/11/21/12/42/beard-1845166_960_720.jpg",
+    "pinnedSpecies": ["Harbor Seal", "Red-tailed Hawk"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-122.4783, 37.8199]
+    }
+  },
+  {
+    "username": "presidio_wildlife",
+    "email": "presidio_wild@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2019/11/07/17/07/photographer-4609311_960_720.jpg",
+    "pinnedSpecies": ["Coyote", "Great Horned Owl"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-122.4662, 37.7989]
+    }
+  },
+  {
+    "username": "mission_naturalist",
+    "email": "mission_naturalist@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2015/01/08/18/29/entrepreneur-593358_960_720.jpg",
+    "pinnedSpecies": ["Red-tailed Hawk", "Anna's Hummingbird"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-122.4148, 37.7599]
+    }
+  },
+  {
+    "username": "marina_birdwatch",
+    "email": "marina_birds@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2016/11/21/12/42/beard-1845166_960_720.jpg",
+    "pinnedSpecies": ["Brown Pelican", "California Gull"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-122.4399, 37.8035]
+    }
+  },
+  {
+    "username": "presidio_explorer",
+    "email": "presidio_wild@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2017/08/01/08/29/people-2563491_960_720.jpg",
+    "pinnedSpecies": ["Coyote", "Great Horned Owl"],
+    "loc": {
+      "type": "Point",
+      "coordinates": [-122.456, 37.7749]
+    }
+  },
+  {
+    "username": "hayward_shoreline",
+    "email": "hayward_nature@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2017/08/01/08/29/people-2563491_960_720.jpg",
+    "pinnedSpecies": ["Raccoon", "Western Gull"],
+    "loc": {
+        "type": "Point",
+        "coordinates": [-122.0808, 37.6530]
+    }
+},
+{
+    "username": "point_reyes_tracker",
+    "email": "ptreyes@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
+    "pinnedSpecies": ["Tule Elk", "Mountain Lion"],
+    "loc": {
+        "type": "Point",
+        "coordinates": [-122.8000, 38.0405]
+    }
+},
+{
+    "username": "muir_woods_observer",
+    "email": "muirwoods@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2016/11/29/09/38/adult-1868750_960_720.jpg",
+    "pinnedSpecies": ["Spotted Owl", "Black Bear"],
+    "loc": {
+        "type": "Point",
+        "coordinates": [-122.5811, 37.8970]
+    }
+},
+{
+    "username": "angel_island_naturalist",
+    "email": "angelisland@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2015/01/08/18/29/entrepreneur-593358_960_720.jpg",
+    "pinnedSpecies": ["Raccoon", "Red Fox"],
+    "loc": {
+        "type": "Point",
+        "coordinates": [-122.4326, 37.8609]
+    }
+},
+{
+    "username": "stanford_wildlife",
+    "email": "stanford_nature@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2015/01/08/18/29/entrepreneur-593358_960_720.jpg",
+    "pinnedSpecies": ["Bobcat", "Western Screech Owl"],
+    "loc": {
+        "type": "Point",
+        "coordinates": [-122.1697, 37.4275]
+    }
+},
+{
+    "username": "pescadero_marsh",
+    "email": "pescadero@example.com",
+    "password": "hashedPassword123",
+    "picUrl": "https://cdn.pixabay.com/photo/2016/11/21/12/42/beard-1845166_960_720.jpg",
+    "pinnedSpecies": ["Great White Shark", "Harbor Seal"],
+    "loc": {
+        "type": "Point",
+        "coordinates": [-122.4147, 37.2552]
+    }
+}
+]
