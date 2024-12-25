@@ -1,2 +1,0 @@
-MONGO_URL='mongodb://root:password@localhost:27017/habitatmap'
-PORT=3000
